@@ -27,12 +27,20 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { LoadingButton } from "@/components/ui/loading-button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().optional(),
+  priority: z.enum(["low", "medium", "high"]),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -54,6 +62,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
     defaultValues: {
       title: item.title,
       description: item.description ?? undefined,
+      priority: item.priority ?? "medium",
     },
   })
 
@@ -119,6 +128,32 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
                     <FormControl>
                       <Input placeholder="Description" type="text" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Check, Copy } from "lucide-react"
 
 import type { ItemPublic } from "@/client"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { cn } from "@/lib/utils"
@@ -28,6 +29,20 @@ function CopyId({ id }: { id: string }) {
         <span className="sr-only">Copy ID</span>
       </Button>
     </div>
+  )
+}
+
+const priorityStyles: Record<string, string> = {
+  low: "bg-slate-500/15 text-slate-700 dark:text-slate-300",
+  medium: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
+  high: "bg-red-500/15 text-red-700 dark:text-red-300",
+}
+
+function PriorityBadge({ priority }: { priority: string }) {
+  return (
+    <Badge variant="outline" className={cn("capitalize", priorityStyles[priority])}>
+      {priority}
+    </Badge>
   )
 }
 
@@ -60,6 +75,13 @@ export const columns: ColumnDef<ItemPublic>[] = [
         </span>
       )
     },
+  },
+  {
+    accessorKey: "priority",
+    header: "Priority",
+    cell: ({ row }) => (
+      <PriorityBadge priority={row.original.priority ?? "medium"} />
+    ),
   },
   {
     id: "actions",
