@@ -90,11 +90,21 @@ export const ItemCreateSchema = {
                 }
             ],
             title: 'Description'
+        },
+        priority: {
+            '$ref': '#/components/schemas/ItemPriority',
+            default: 'medium'
         }
     },
     type: 'object',
     required: ['title'],
     title: 'ItemCreate'
+} as const;
+
+export const ItemPrioritySchema = {
+    type: 'string',
+    enum: ['low', 'medium', 'high'],
+    title: 'ItemPriority'
 } as const;
 
 export const ItemPublicSchema = {
@@ -116,6 +126,10 @@ export const ItemPublicSchema = {
                 }
             ],
             title: 'Description'
+        },
+        priority: {
+            '$ref': '#/components/schemas/ItemPriority',
+            default: 'medium'
         },
         id: {
             type: 'string',
@@ -171,6 +185,16 @@ export const ItemUpdateSchema = {
                 }
             ],
             title: 'Description'
+        },
+        priority: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/ItemPriority'
+                },
+                {
+                    type: 'null'
+                }
+            ]
         }
     },
     type: 'object',
